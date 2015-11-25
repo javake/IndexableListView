@@ -177,8 +177,6 @@ public class IndexScroller {
 		return false;
 	}
 
-	private static final boolean MODE_WRAP_HEIGHT = true;
-
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
 		if (this.mSections == null) {
 			return;
@@ -188,7 +186,7 @@ public class IndexScroller {
 		float f = (h - 2.0F * mIndexbarMargin)
 				/ IndexableAdapter.ALL_Sections.length()
 				* ((IndexableAdapter.ALL_Sections.length() - mSections.length) / 2);
-		if (MODE_WRAP_HEIGHT) {
+		if (mListView.isIndexBarWarpHeight()) {
 			mIndexbarRect = new RectF(w - mIndexbarMargin - mIndexbarWidth, 
 					f + mIndexbarMargin, 
 					w - mIndexbarMargin, 

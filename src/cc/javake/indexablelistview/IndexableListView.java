@@ -26,7 +26,9 @@ import android.widget.ListView;
 
 public class IndexableListView extends ListView {
 	
-	private boolean indexBarAutoHide = false;
+	private static final boolean indexBarAutoHide = false; // bar hide auto when no action
+	
+	private static final boolean indexBarWarpHeight = true; // warp height for index bar
 	
 	private boolean mIsFastScrollEnabled = false;
 	private IndexScroller mScroller = null;
@@ -48,6 +50,11 @@ public class IndexableListView extends ListView {
 		return indexBarAutoHide;
 	}
 	
+	
+	public boolean isIndexBarWarpHeight() {
+		return indexBarWarpHeight;
+	}
+
 	@Override
 	public boolean isFastScrollEnabled() {
 		return mIsFastScrollEnabled;
