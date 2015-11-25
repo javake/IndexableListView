@@ -2,6 +2,7 @@ package cc.javake.indexablelistview;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +21,15 @@ public abstract class IndexableAdapter<T extends Indexable> extends BaseAdapter
 
 	private static final String LETTER_SEC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String OTHER_SEC = "#";
+	
+	private static final String TOP_SEC = "↑";
 
 	public static final String ALL_Sections = OTHER_SEC + LETTER_SEC; // #ABC...
 
 	private Context context;
 	private List<T> dataList;
 
-	private int posiOffset;	// ListView 设置了 HeadView后的 位置偏移量
+	private int posiOffset;	// ListView 设置了 HeadView后的 位置偏移量   > 0 支持 ↑ 回到顶部
 	private Map<String, Integer> sectionMap = new HashMap<String, Integer>();
 	private String[] sections4Show = null;
 
@@ -56,9 +59,12 @@ public abstract class IndexableAdapter<T extends Indexable> extends BaseAdapter
 				sectionMap.put(section, i + posiOffset);
 			}
 		}
+		if (posiOffset > 0) {
+			sectionMap.put(TOP_SEC, 0);
+		}
 		List<String> sectList = new ArrayList<String>();
 		sectList.addAll(sectionMap.keySet());
-		Collections.sort(sectList); // 排序 [进入Map后 已乱序]
+		Collections.sort(sectList, sectionCompiler); // 排序 [进入Map后 已乱序]
 		sections4Show = new String[sectList.size()];
 	    sectList.toArray(sections4Show);
 	}
@@ -109,5 +115,18 @@ public abstract class IndexableAdapter<T extends Indexable> extends BaseAdapter
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	private Comparator<String> sectionCompiler = new Comparator<String>() {
+
+		@Override
+		public int compare(String lhs, String rhs) {
+			if (TOP_SEC.equals(lhs)) {
+				return -1;
+			} else if (TOP_SEC.equals(rhs)) {
+				return 1;
+			}
+			return lhs.compareTo(rhs);
+		}
+	};
 
 }
