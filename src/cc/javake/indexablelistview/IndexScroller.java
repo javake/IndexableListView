@@ -74,7 +74,7 @@ public class IndexScroller {
 		// mAlphaRate determines the rate of opacity
 		Paint indexbarPaint = new Paint();
 		indexbarPaint.setColor(Color.BLACK);
-		indexbarPaint.setAlpha((int) ((mIsIndexing ? 96 :64) * mAlphaRate));
+		indexbarPaint.setAlpha((int) ((mIsIndexing ? 128 : 84) * mAlphaRate));
 		indexbarPaint.setAntiAlias(true);
 		canvas.drawRoundRect(mIndexbarRect, 5 * mDensity, 5 * mDensity,
 				indexbarPaint);
@@ -84,7 +84,7 @@ public class IndexScroller {
 			if (mCurrentSection >= 0) {
 				Paint previewPaint = new Paint();
 				previewPaint.setColor(Color.BLACK);
-				previewPaint.setAlpha(96);
+				previewPaint.setAlpha(128);
 				previewPaint.setAntiAlias(true);
 				previewPaint.setShadowLayer(3, 0, 0, Color.argb(64, 0, 0, 0));
 
