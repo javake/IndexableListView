@@ -111,7 +111,7 @@ public class IndexScroller {
 						previewPaint);
 				int sectionIndex = mListView.isIndexBarDrawTopSec() ? mCurrentSection :mCurrentSection +1;
 				if (IndexableAdapter.TOP_SEC.equals(mSections[sectionIndex])) {
-					Drawable drBig = mListView.getContext().getResources().getDrawable(R.drawable.ic_search_big);
+					Drawable drBig = mListView.getContext().getResources().getDrawable(R.drawable.indexablelistview_search_l);
 					Bitmap bmBig = ((BitmapDrawable)drBig).getBitmap();
 					float preImgPadLeft = previewSize > bmBig.getWidth() ? (previewSize -bmBig.getWidth())/2 : 0;
 					float preImgPadTop = previewSize > bmBig.getHeight() ? (previewSize -bmBig.getHeight())/2 : 0;
@@ -159,7 +159,7 @@ public class IndexScroller {
 	}
 
 	private void drawSearchImg(Canvas canvas, Paint indexPaint) {
-		Drawable dr = mListView.getContext().getResources().getDrawable(R.drawable.ic_search);
+		Drawable dr = mListView.getContext().getResources().getDrawable(R.drawable.indexablelistview_search_s);
 		Bitmap bm = ((BitmapDrawable)dr).getBitmap();
 		float imgPadLeft = mIndexbarWidth > bm.getWidth() ? (mIndexbarWidth -bm.getWidth())/2 : 0;
 		canvas.drawBitmap(bm, mIndexbarRect.left +imgPadLeft, mIndexbarRect.top + mIndexbarMargin, indexPaint);

@@ -34,12 +34,13 @@ public class DemoActivity extends Activity {
         // head view
         LayoutInflater layInf = LayoutInflater.from(this);
         TextView tv = (TextView)layInf.inflate(android.R.layout.simple_list_item_1, null);
-        tv.setText("Hello , I am head text");
+        tv.setText("Hello , I am search view.");
         tv.setBackgroundColor(Color.DKGRAY);
         tv.setTextColor(Color.CYAN);
+        tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.indexablelistview_search_l, 0, 0, 0);
+        tv.setCompoundDrawablePadding(15);
         mListView.addHeaderView(tv);
         
-//        tv.setClickable(true);
         tv.setOnClickListener(new OnClickListener() {
 			
 			@Override
