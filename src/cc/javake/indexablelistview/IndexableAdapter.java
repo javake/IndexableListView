@@ -22,9 +22,9 @@ public abstract class IndexableAdapter<T extends Indexable> extends BaseAdapter
 	private static final String LETTER_SEC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String OTHER_SEC = "#";
 	
-	private static final String TOP_SEC = "↑";
+	public static final String TOP_SEC = "↑"; // ^
 
-	public static final String ALL_Sections = OTHER_SEC + LETTER_SEC; // #ABC...
+	public static final String ALL_Sections = TOP_SEC + OTHER_SEC + LETTER_SEC; // ↑#ABC...
 
 	private Context context;
 	private List<T> dataList;

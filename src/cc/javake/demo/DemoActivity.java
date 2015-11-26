@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import cc.javake.indexablelistview.IndexableAdapter;
@@ -37,6 +38,16 @@ public class DemoActivity extends Activity {
         tv.setBackgroundColor(Color.DKGRAY);
         tv.setTextColor(Color.CYAN);
         mListView.addHeaderView(tv);
+        
+//        tv.setClickable(true);
+        tv.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+//				mListView.setIndexBarWarpHeight(!mListView.isIndexBarWarpHeight());
+				mListView.setIndexBarDrawTopSec(!mListView.isIndexBarDrawTopSec());
+			}
+		});
         
         DemoAdapter adapter = new DemoAdapter(this, dataList, 1);
         

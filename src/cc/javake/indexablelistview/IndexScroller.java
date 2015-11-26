@@ -17,10 +17,13 @@
 package cc.javake.indexablelistview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
@@ -106,13 +109,24 @@ public class IndexScroller {
 
 				canvas.drawRoundRect(previewRect, 5 * mDensity, 5 * mDensity,
 						previewPaint);
-				canvas.drawText(
-						mSections[mCurrentSection],
-						previewRect.left + (previewSize - previewTextWidth) / 2
-								- 1,
-						previewRect.top + mPreviewPadding
-								- previewTextPaint.ascent() + 1,
-						previewTextPaint);
+				int sectionIndex = mListView.isIndexBarDrawTopSec() ? mCurrentSection :mCurrentSection +1;
+				if (IndexableAdapter.TOP_SEC.equals(mSections[sectionIndex])) {
+					Drawable drBig = mListView.getContext().getResources().getDrawable(R.drawable.ic_search_big);
+					Bitmap bmBig = ((BitmapDrawable)drBig).getBitmap();
+					float preImgPadLeft = previewSize > bmBig.getWidth() ? (previewSize -bmBig.getWidth())/2 : 0;
+					float preImgPadTop = previewSize > bmBig.getHeight() ? (previewSize -bmBig.getHeight())/2 : 0;
+					canvas.drawBitmap(bmBig, previewRect.left + preImgPadLeft - 1,
+							previewRect.top + preImgPadTop + 1,
+							previewTextPaint);
+				} else {
+					canvas.drawText(
+							mSections[sectionIndex],
+							previewRect.left + (previewSize - previewTextWidth) / 2
+							- 1,
+							previewRect.top + mPreviewPadding
+							- previewTextPaint.ascent() + 1,
+							previewTextPaint);
+				}
 			}
 
 			Paint indexPaint = new Paint();
@@ -122,19 +136,45 @@ public class IndexScroller {
 			indexPaint.setTextSize(12 * mScaledDensity);
 
 			float sectionHeight = (mIndexbarRect.height() - 2 * mIndexbarMargin)
-					/ mSections.length;
+					/ getSectionsLength();
 			float paddingTop = (sectionHeight - (indexPaint.descent() - indexPaint
 					.ascent())) / 2;
+			
+			
 			for (int i = 0; i < mSections.length; i++) {
+				if (i == 0 && IndexableAdapter.TOP_SEC.equals(mSections[i])) { // Head for Search
+					if (mListView.isIndexBarDrawTopSec()) {
+						drawSearchImg(canvas, indexPaint);
+					}
+					continue;
+				}
 				float paddingLeft = (mIndexbarWidth - indexPaint
 						.measureText(mSections[i])) / 2;
+				float ptNum = mListView.isIndexBarDrawTopSec() ? i : (i-1);
 				canvas.drawText(mSections[i], mIndexbarRect.left + paddingLeft,
-						mIndexbarRect.top + mIndexbarMargin + sectionHeight * i
+						mIndexbarRect.top + mIndexbarMargin + sectionHeight * ptNum
 								+ paddingTop - indexPaint.ascent(), indexPaint);
 			}
 		}
 	}
 
+	private void drawSearchImg(Canvas canvas, Paint indexPaint) {
+		Drawable dr = mListView.getContext().getResources().getDrawable(R.drawable.ic_search);
+		Bitmap bm = ((BitmapDrawable)dr).getBitmap();
+		float imgPadLeft = mIndexbarWidth > bm.getWidth() ? (mIndexbarWidth -bm.getWidth())/2 : 0;
+		canvas.drawBitmap(bm, mIndexbarRect.left +imgPadLeft, mIndexbarRect.top + mIndexbarMargin, indexPaint);
+	}
+	
+	/**
+	 * 考虑 是否显示 置顶 section 后的 section 数量
+	 * @return
+	 */
+	private int getSectionsLength() {
+		return (!mListView.isIndexBarDrawTopSec() 
+				&& IndexableAdapter.TOP_SEC.equals(mSections[0])) 
+				? mSections.length-1: mSections.length;
+	}
+	
 	public boolean onTouchEvent(MotionEvent ev) {
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
@@ -178,14 +218,14 @@ public class IndexScroller {
 	}
 
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
-		if (this.mSections == null) {
+		if (this.mSections == null && this.mSections.length > 0) {
 			return;
 		}
 		mListViewWidth = w;
 		mListViewHeight = h;
 		float f = (h - 2.0F * mIndexbarMargin)
 				/ IndexableAdapter.ALL_Sections.length()
-				* ((IndexableAdapter.ALL_Sections.length() - mSections.length) / 2);
+				* ((1.0F * IndexableAdapter.ALL_Sections.length() - getSectionsLength()) / 2);
 		if (mListView.isIndexBarWarpHeight()) {
 			mIndexbarRect = new RectF(w - mIndexbarMargin - mIndexbarWidth, 
 					f + mIndexbarMargin, 
@@ -260,14 +300,14 @@ public class IndexScroller {
 	}
 
 	private int getSectionByPoint(float y) {
-		if (mSections == null || mSections.length == 0)
+		if (mSections == null || getSectionsLength() == 0)
 			return 0;
 		if (y < mIndexbarRect.top + mIndexbarMargin)
 			return 0;
 		if (y >= mIndexbarRect.top + mIndexbarRect.height() - mIndexbarMargin)
-			return mSections.length - 1;
+			return getSectionsLength() - 1;
 		return (int) ((y - mIndexbarRect.top - mIndexbarMargin) / ((mIndexbarRect
-				.height() - 2 * mIndexbarMargin) / mSections.length));
+				.height() - 2 * mIndexbarMargin) / getSectionsLength()));
 	}
 
 	private void fade(long delay) {

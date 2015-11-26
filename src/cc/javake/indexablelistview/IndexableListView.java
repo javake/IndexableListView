@@ -26,9 +26,11 @@ import android.widget.ListView;
 
 public class IndexableListView extends ListView {
 	
-	private static final boolean indexBarAutoHide = false; // bar hide auto when no action
+	private boolean indexBarAutoHide = false; // bar hide auto when no action
 	
-	private static final boolean indexBarWarpHeight = true; // warp height for index bar
+	private boolean indexBarWarpHeight = true; // warp height for index bar
+	
+	private boolean indexBarDrawTopSec = true; // bar draw topSection then set HeadView
 	
 	private boolean mIsFastScrollEnabled = false;
 	private IndexScroller mScroller = null;
@@ -50,9 +52,28 @@ public class IndexableListView extends ListView {
 		return indexBarAutoHide;
 	}
 	
-	
 	public boolean isIndexBarWarpHeight() {
 		return indexBarWarpHeight;
+	}
+
+	public void setIndexBarWarpHeight(boolean indexBarWarpHeight) {
+		this.indexBarWarpHeight = indexBarWarpHeight;
+		if (mScroller != null) {
+			mScroller.onSizeChanged(this.getWidth(), this.getHeight(), 0, 0);	
+			this.invalidate();
+		}
+	}
+	
+	public boolean isIndexBarDrawTopSec() {
+		return indexBarDrawTopSec;
+	}
+
+	public void setIndexBarDrawTopSec(boolean indexBarDrawTopSec) {
+		this.indexBarDrawTopSec = indexBarDrawTopSec;
+		if (mScroller != null) {
+			mScroller.onSizeChanged(this.getWidth(), this.getHeight(), 0, 0);
+			this.invalidate();
+		}
 	}
 
 	@Override
@@ -77,7 +98,7 @@ public class IndexableListView extends ListView {
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
-		
+		System.out.println(" indexable list view draw .");
 		// Overlay index bar
 		if (mScroller != null)
 			mScroller.draw(canvas);
