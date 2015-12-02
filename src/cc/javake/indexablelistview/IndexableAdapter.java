@@ -79,7 +79,12 @@ public abstract class IndexableAdapter<T extends Indexable> extends BaseAdapter
 	
 	public void setDataList(List<T> dataList) {
 		this.dataList = dataList;
+	}
+	
+	@Override
+	public void notifyDataSetChanged() {
 		initData4Sections();
+		super.notifyDataSetChanged();
 	}
 	
 	@Override

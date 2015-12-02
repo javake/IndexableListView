@@ -71,7 +71,7 @@ public class IndexScroller {
 	}
 
 	public void draw(Canvas canvas) {
-		if (mState == STATE_HIDDEN)
+		if (mIndexbarRect == null || mState == STATE_HIDDEN)
 			return;
 
 		// mAlphaRate determines the rate of opacity
@@ -218,7 +218,7 @@ public class IndexScroller {
 	}
 
 	public void onSizeChanged(int w, int h, int oldw, int oldh) {
-		if (this.mSections == null && this.mSections.length > 0) {
+		if (this.mSections == null || this.mSections.length == 0) {
 			return;
 		}
 		mListViewWidth = w;

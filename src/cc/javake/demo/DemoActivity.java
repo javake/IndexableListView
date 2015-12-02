@@ -6,12 +6,16 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import cc.javake.indexablelistview.IndexableAdapter;
 import cc.javake.indexablelistview.IndexableListView;
@@ -20,6 +24,8 @@ import cc.javake.indexablelistview.R;
 public class DemoActivity extends Activity {
 
 	private IndexableListView mListView;
+	private DemoAdapter adapter;
+	private List<DemoItem> dataList;
 	
     /** Called when the activity is first created. */
     @Override
@@ -28,7 +34,7 @@ public class DemoActivity extends Activity {
         setContentView(R.layout.main);
         mListView = (IndexableListView) findViewById(R.id.listview);
 
-        List<DemoItem> dataList = buildData();
+        dataList = buildData();
         Collections.sort(dataList);
 
         // head view
@@ -46,14 +52,33 @@ public class DemoActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 //				mListView.setIndexBarWarpHeight(!mListView.isIndexBarWarpHeight());
-				mListView.setIndexBarDrawTopSec(!mListView.isIndexBarDrawTopSec());
+//				mListView.setIndexBarDrawTopSec(!mListView.isIndexBarDrawTopSec());
+				dataList.add(new DemoItem("AA test"));
+				Collections.sort(dataList);
+				adapter.notifyDataSetChanged();
+				mListView.withDataSetChanged();
 			}
 		});
         
-        DemoAdapter adapter = new DemoAdapter(this, dataList, 1);
-        
-        mListView.setAdapter(adapter);
         mListView.setFastScrollEnabled(true);
+        
+        new Handler() { }.postDelayed(new Thread() {
+        	@Override
+        	public void run() {
+        		super.run();
+                adapter = new DemoAdapter(DemoActivity.this, dataList, 1);
+                mListView.setAdapter(adapter);
+                mListView.withDataSetChanged();
+        	}
+        }, 9000);
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+//				startActivity(new Intent(DemoActivity.this, TestActivity.class));
+			}
+		});
     }
     
     class DemoAdapter extends IndexableAdapter<DemoItem> {

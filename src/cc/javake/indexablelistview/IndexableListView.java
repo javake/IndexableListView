@@ -98,7 +98,6 @@ public class IndexableListView extends ListView {
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
-		System.out.println(" indexable list view draw .");
 		// Overlay index bar
 		if (mScroller != null)
 			mScroller.draw(canvas);
@@ -142,6 +141,13 @@ public class IndexableListView extends ListView {
 		super.setAdapter(adapter);
 		if (mScroller != null)
 			mScroller.setAdapter(adapter);
+	}
+	
+	public void withDataSetChanged() {
+		if (mScroller != null && getAdapter() != null) {
+			mScroller.setAdapter(getAdapter());
+			mScroller.onSizeChanged(this.getWidth(), this.getHeight(), 0, 0);
+		}
 	}
 
 	@Override
