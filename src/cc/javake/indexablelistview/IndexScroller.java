@@ -293,6 +293,9 @@ public class IndexScroller {
 	}
 
 	public boolean contains(float x, float y) {
+		if (mIndexbarRect == null) {
+			return false;
+		}
 		// Determine if the point is in index bar region, which includes the
 		// right margin of the bar
 		return (x >= mIndexbarRect.left && y >= mIndexbarRect.top && y <= mIndexbarRect.top
