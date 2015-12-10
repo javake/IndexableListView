@@ -206,6 +206,7 @@ public class IndexScroller {
 			}
 			break;
 		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_CANCEL:
 			if (mIsIndexing) {
 				mIsIndexing = false;
 				mCurrentSection = -1;
